@@ -98,7 +98,7 @@ function field_validate(input_field, next) {
                         value: $(input_field).val()
                     },
                     url: siteUrl + 'validate',
-                    success: function(ajax_data) {
+                    success: function (ajax_data) {
                         mydata = ajax_data;
                     }
                 })
@@ -122,7 +122,7 @@ function toggle_error(obj, err, txt) {
         if (!$(obj).next().hasClass('msg')) {
             $('<span class="msg msg-' + $(obj).attr('id') + '">' + txt + '</span>').insertAfter($(obj)).show();
             $(obj).focus();
-        } else if($(obj).next().hasClass('msg')) {
+        } else if ($(obj).next().hasClass('msg')) {
             $(obj).next('.msg').html(txt);
         }
     } else if (!err) {
