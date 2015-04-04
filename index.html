@@ -16,6 +16,8 @@
                 <div class="b-input">
                     <input type="text" name="username" class="text validate" id="username" data-valid="not_empty maxl-20 minl-3"/>
                 </div> <!-- b-input -->
+
+                <div class="clear"></div>
             </div> <!-- b-item -->
 
             
@@ -27,6 +29,47 @@
                 <div class="b-input">
                     <input type="text" name="email" class="text validate" id="username" data-valid="not_empty email"/>
                 </div> <!-- b-input -->
+
+                <div class="clear"></div>
+            </div> <!-- b-item -->
+
+
+            <div class="b-item">
+                <div class="b-label">
+                    Password:
+                </div> <!-- b-label -->
+
+                <div class="b-input">
+                    <input type="password" name="password" class="text validate" id="password" data-valid="not_empty password minl-6"/>
+                </div> <!-- b-input -->
+
+                <div class="clear"></div>
+            </div> <!-- b-item -->
+
+
+            <div class="b-item">
+                <div class="b-label">
+                    Password confirm:
+                </div> <!-- b-label -->
+
+                <div class="b-input">
+                    <input type="password" name="password_confirm" class="text validate" id="password_confirm" data-valid="not_empty password minl-6"/>
+                </div> <!-- b-input -->
+
+                <div class="clear"></div>
+            </div> <!-- b-item -->
+
+
+            <div class="b-item">
+                <div class="b-label">
+                    &nbsp;<input type="checkbox" name="user_agreement" class="checkbox validate pull-right" id="user_agreement" data-valid="checked"/>
+                </div> <!-- b-label -->
+
+                <div class="b-input">
+                    I agree with the terms.
+                </div> <!-- b-input -->
+
+                <div class="clear"></div>
             </div> <!-- b-item -->
 
 
@@ -34,9 +77,12 @@
                 <div class="b-input">
                     <input type="submit" class="submit" value="Submit"/>
                 </div> <!-- b-input -->
+
+                <div class="clear"></div>
             </div> <!-- b-item -->
         </form> <!-- simple_form -->
     </div> <!-- b-form -->
+    
     <script type="text/javascript" src="js/lib/jquery-1.10.1.min.js"></script>
     <script type="text/javascript" src="js/simple_form_validator.js"></script>
     <script type="text/javascript">
