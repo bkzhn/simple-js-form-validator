@@ -74,11 +74,11 @@ function field_validate(input_field, next) {
                 if (toggle_error(input_field, is_invalid, not_numeric)) return false;
                 break;
             case 'not_greater_than':
-                var is_invalid = $(input_field).val() > $('#' + param[1]).val();
+                var is_invalid = parseInt($(input_field).val()) > $('#' + param[1]).val();
                 if (toggle_error(input_field, is_invalid, greater_than + param[2])) return false;
                 break;
             case 'not_less_than':
-                var is_invalid = $(input_field).val() < $('#' + param[1]).val();
+                var is_invalid = parseInt($(input_field).val()) < $('#' + param[1]).val();
                 if (toggle_error(input_field, is_invalid, less_than + param[2])) return false;
                 break;
             case 'not_zero':
@@ -144,7 +144,7 @@ function toggle_error(obj, err, txt) {
 // Функция валидирующая по полю пароля и подтверждения
 function password_validator() {
     $('#password').bind('keyup blur', function () {
-        var is_invalid = /\s/g.test($(input_field).val());
+        var is_invalid = /\s/g.test($(this).val());
         if (!is_invalid) {
             is_invalid = $(this).val().length < 6;
             if (toggle_error($(this), is_invalid, password_short)) return false;
@@ -154,7 +154,7 @@ function password_validator() {
     });
     
     $('#password_confirm').keyup(function () {
-        var is_invalid = /\s/g.test($(input_field).val());
+        var is_invalid = /\s/g.test($(this).val());
         if (!is_invalid) {
             is_invalid = $('#password').val() != $(this).val();
             if (toggle_error($(this), is_invalid, not_match)) return false;
