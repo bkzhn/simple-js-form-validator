@@ -10,6 +10,7 @@ checked = 'Выберите пункт';
 var less_than = 'Значение меньше ';
 var greater_than = 'Значение больше ';
 var not_zero = 'Значение должно быть больше 0'
+var no_spaces = 'Удалите пробелы пожалуйста'
 
 
 // Основная функция
@@ -54,6 +55,10 @@ function field_validate(input_field, next) {
             case 'not_empty':
                 var is_invalid = $(input_field).val().length == 0 || typeof $(input_field).val().length == 'undefined';
                 if (toggle_error(input_field, is_invalid, empty)) return false;
+                break;
+            case 'no_spaces':
+                var is_invalid = /\s/g.test($(input_field).val());
+                if (toggle_error(input_field, is_invalid, no_spaces)) return false;
                 break;
             case 'maxl':
                 var is_invalid = $(input_field).val().length > param[1];
@@ -139,12 +144,22 @@ function toggle_error(obj, err, txt) {
 // Функция валидирующая по полю пароля и подтверждения
 function password_validator() {
     $('#password').bind('keyup blur', function () {
-        var is_invalid = $(this).val().length < 6;
-        if (toggle_error($(this), is_invalid, password_short)) return false;
+        var is_invalid = /\s/g.test($(input_field).val());
+        if (!is_invalid) {
+            is_invalid = $(this).val().length < 6;
+            if (toggle_error($(this), is_invalid, password_short)) return false;
+        } else {
+            if (toggle_error($(this), is_invalid, no_spaces)) return false;
+        }
     });
     
     $('#password_confirm').keyup(function () {
-        var is_invalid = $('#password').val() != $(this).val();
-        if (toggle_error($(this), is_invalid, not_match)) return false;
+        var is_invalid = /\s/g.test($(input_field).val());
+        if (!is_invalid) {
+            is_invalid = $('#password').val() != $(this).val();
+            if (toggle_error($(this), is_invalid, not_match)) return false;
+        } else {
+            if (toggle_error($(this), is_invalid, no_spaces)) return false;
+        }
     });
 } // password_validator()
