@@ -1,3 +1,5 @@
+'use strict';
+
 var empty = 'Поле пусто';
 var too_long = 'Слишком длинное значение';
 var too_short = 'Слишком короткое значение';
