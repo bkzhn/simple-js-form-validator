@@ -1,5 +1,9 @@
 'use strict';
 
+if (typeof jQuery == 'undefined') {
+  throw new Error('jQuery is not defined');
+}
+
 var errorMessages = {
   empty: 'Field is empty',
   tooLong: 'Value is too long',

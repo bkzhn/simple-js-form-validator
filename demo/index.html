@@ -86,6 +86,10 @@
     <script type="text/javascript" src="js/lib/jquery-1.10.1.min.js"></script>
     <script type="text/javascript" src="js/simple-js-form-validator.js"></script>
     <script type="text/javascript">
+        if (typeof jQuery == 'undefined') {
+          throw new Error('jQuery is not defined');
+        }
+
         $(document).ready(function () {
             simpleFormValidator('.simple-form');
         });
