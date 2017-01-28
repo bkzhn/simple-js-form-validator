@@ -22,18 +22,21 @@ var errorMessages = {
 
 // main function
 function simpleFormValidator(form) {
-  $(form).submit(function(e) {
+  var $form = $(form);
+
+  $form.submit(function(e) {
     if (!$(this).validateForm()) {
       e.preventDefault();
     }
   });
 
-  validatePassword();
+  validatePassword($('#password'), $('#password_confirm'));
 
-  $(form).find('.validate').each(function() {
-    $(this).on('blur', function() {
-      validateField(this);
-    });
+  $form.find('.validate')
+    .each(function() {
+      $(this).on('blur', function() {
+        validateField(this);
+      });
   });
 }
 
@@ -54,86 +57,89 @@ jQuery.fn.validateForm = function() {
 };
 
 // function that checks a field
-function validateField(inputField, next) {
+function validateField(inputField) {
+  var isInvalid;
   var isValid = true;
-  var data = $(inputField).attr('data-valid').split(' ');
+
+  var $inputField = $(inputField);
+  var data = $inputField.attr('data-valid').split(' ');
 
   for (var i = 0; i < data.length; i++) {
     var param = data[i].split('-');
 
     switch (param[0]) {
       case 'not_empty':
-        var isInvalid = $(inputField).val().length == 0 || typeof $(inputField).val().length == 'undefined';
+        isInvalid = $inputField.val().length == 0 || typeof $inputField.val().length == 'undefined';
 
-        if (toggleError(inputField, isInvalid, errorMessages.empty)) {
+        if (toggleError($inputField, isInvalid, errorMessages.empty)) {
           return false;
         }
         break;
       case 'no_spaces':
-        var isInvalid = /\s/g.test($(inputField).val());
+        isInvalid = /\s/g.test($inputField.val());
 
-        if (toggleError(inputField, isInvalid, errorMessages.noSpaces)) {
+        if (toggleError($inputField, isInvalid, errorMessages.noSpaces)) {
           return false;
         }
         break;
       case 'maxl':
-        var isInvalid = $(inputField).val().length > param[1];
+        isInvalid = $inputField.val().length > param[1];
 
-        if (toggleError(inputField, isInvalid, errorMessages.tooLong)) {
+        if (toggleError($inputField, isInvalid, errorMessages.tooLong)) {
           return false;
         }
         break;
       case 'minl':
-        var isInvalid = $(inputField).val().length < param[1];
+        isInvalid = $inputField.val().length < param[1];
 
-        if (toggleError(inputField, isInvalid, errorMessages.tooShort)) {
+        if (toggleError($inputField, isInvalid, errorMessages.tooShort)) {
           return false;
         }
         break;
       case 'is_numeric':
-        var isInvalid = !$.isNumeric($(inputField).val());
+        isInvalid = !$.isNumeric($inputField.val());
 
-        if ($(inputField).val() == null) {
+        if ($inputField.val() == null) {
           isInvalid = false;
         }
 
-        if (toggleError(inputField, isInvalid, errorMessages.notNumeric)) {
+        if (toggleError($inputField, isInvalid, errorMessages.notNumeric)) {
           return false;
         }
         break;
       case 'not_greater_than':
-        var isInvalid = parseInt($(inputField).val()) > $('#' + param[1]).val();
+        isInvalid = parseInt($inputField.val()) > $('#' + param[1]).val();
 
-        if (toggleError(inputField, isInvalid, greater_than + param[2])) {
+        if (toggleError($inputField, isInvalid, greater_than + param[2])) {
           return false;
         }
         break;
       case 'not_less_than':
-        var isInvalid = parseInt($(inputField).val()) < $('#' + param[1]).val();
+        isInvalid = parseInt($inputField.val()) < $('#' + param[1]).val();
 
-        if (toggleError(inputField, isInvalid, errorMessages.lessThan + param[2])) {
+        if (toggleError($inputField, isInvalid, errorMessages.lessThan + param[2])) {
           return false;
         }
         break;
       case 'not_zero':
-        var isInvalid = $(inputField).val() == 0;
+        isInvalid = $inputField.val() == 0;
 
-        if (toggleError(inputField, isInvalid, errorMessages.greaterThanZero)) {
+        if (toggleError($inputField, isInvalid, errorMessages.greaterThanZero)) {
           return false;
         }
         break;
       case 'email':
         var pattern = new RegExp(/^((([a-z]|\d|[!#\$%&'\*\+\-\/=\?\^_`{\|}~]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+(\.([a-z]|\d|[!#\$%&'\*\+\-\/=\?\^_`{\|}~]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+)*)|((\x22)((((\x20|\x09)*(\x0d\x0a))?(\x20|\x09)+)?(([\x01-\x08\x0b\x0c\x0e-\x1f\x7f]|\x21|[\x23-\x5b]|[\x5d-\x7e]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(\\([\x01-\x09\x0b\x0c\x0d-\x7f]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]))))*(((\x20|\x09)*(\x0d\x0a))?(\x20|\x09)+)?(\x22)))@((([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.)+(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.?$/i);
-        var isInvalid = !pattern.test($(inputField).val());
+        isInvalid = !pattern.test($inputField.val());
 
-        if (toggleError(inputField, isInvalid, errorMessages.invalidEmail)) {
+        if (toggleError($inputField, isInvalid, errorMessages.invalidEmail)) {
           return false;
         }
         break;
       case 'checked':
-        var isInvalid = !$(inputField).is(':checked');
+        isInvalid = !$inputField.is(':checked');
 
-        if (toggleError(inputField, isInvalid, errorMessages.isNotChecked)) {
+        if (toggleError($inputField, isInvalid, errorMessages.isNotChecked)) {
           return false;
         }
         break;
@@ -143,16 +149,16 @@ function validateField(inputField, next) {
         $.when($.ajax({
           type: 'POST',
           data: {
-            param: $(inputField).attr('name'),
-            value: $(inputField).val()
+            param: $inputField.attr('name'),
+            value: $inputField.val()
           },
           url: siteUrl + 'validate',
-          success: function(ajax_data) {
-            mydata = ajax_data;
+          success: function(ajaxData) {
+            mydata = ajaxData;
           }
           }))
           .then(function() {
-            if (toggleError(inputField, mydata == 1, exist)) {
+            if (toggleError($inputField, mydata == 1, exist)) {
               return false;
             }
           }
@@ -165,64 +171,66 @@ function validateField(inputField, next) {
 }
 
 // function to show or hide error messages
-function toggleError(obj, err, txt) {
-  if (err) {
-    $(obj).addClass('has-error');
+function toggleError($element, isError, text) {
+  if (isError) {
+    $element.addClass('has-error');
 
-    if ($(obj).hasClass('has-success')) {
-      $(obj).removeClass('has-success');
+    if ($element.hasClass('has-success')) {
+      $element.removeClass('has-success');
     }
 
-    if (!$(obj).next().hasClass('msg')) {
-      $('<span class="msg msg-' + $(obj).attr('id') + '">' + txt + '</span>').insertAfter($(obj)).show();
-      $(obj).focus();
-    } else if ($(obj).next().hasClass('msg')) {
-      $(obj).next('.msg').html(txt);
+    if (!$element.next().hasClass('msg')) {
+      $('<span class="msg msg-' + $element.attr('id') + '">' + text + '</span>').insertAfter($element).show();
+      $element.focus();
+    } else if ($element.next().hasClass('msg')) {
+      $element.next('.msg').html(text);
     }
-  } else if (!err) {
-    $(obj).addClass('has-success');
+  } else if (!isError) {
+    $element.addClass('has-success');
 
-    if ($(obj).hasClass('has-error')) {
-      $(obj).removeClass('has-error');
+    if ($element.hasClass('has-error')) {
+      $element.removeClass('has-error');
     }
 
-    if ($(obj).next().hasClass('msg')) {
-      $(obj).next('.msg-' + $(obj).attr('id')).remove();
+    if ($element.next().hasClass('msg')) {
+      $element.next('.msg-' + $element.attr('id')).remove();
     }
   }
 
-  return err;
+  return isError;
 }
 
-// Функция валидирующая по полю пароля и подтверждения
-function validatePassword() {
-  $('#password').bind('keyup blur', function() {
-    var isInvalid = /\s/g.test($(this).val());
+// function that validates password
+function validatePassword($password, $passwordConfirm) {
+  $password.bind('keyup blur', function() {
+    var $this = $(this);
+    var isInvalid = /\s/g.test($this.val());
 
     if (!isInvalid) {
-      isInvalid = $(this).val().length < 6;
+      isInvalid = $this.val().length < 6;
 
-      if (toggleError($(this), isInvalid, errorMessages.shortPassword)) {
+      if (toggleError($this, isInvalid, errorMessages.shortPassword)) {
         return false;
       }
     } else {
-      if (toggleError($(this), isInvalid, errorMessages.noSpaces)) {
+      if (toggleError($this, isInvalid, errorMessages.noSpaces)) {
         return false;
       }
     }
   });
 
-  $('#password_confirm').keyup(function() {
-    var isInvalid = /\s/g.test($(this).val());
+  $passwordConfirm.keyup(function() {
+    var $this = $(this);
+    var isInvalid = /\s/g.test($this.val());
 
     if (!isInvalid) {
-      isInvalid = $('#password').val() != $(this).val();
+      isInvalid = $password.val() != $this.val();
 
-      if (toggleError($(this), isInvalid, errorMessages.passwordsDontMatch)) {
+      if (toggleError($this, isInvalid, errorMessages.passwordsDontMatch)) {
         return false;
       }
     } else {
-      if (toggleError($(this), isInvalid, errorMessages.noSpaces)) {
+      if (toggleError($this, isInvalid, errorMessages.noSpaces)) {
         return false;
       }
     }
